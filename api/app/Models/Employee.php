@@ -30,7 +30,7 @@ class Employee extends Model
         'first_name' => 'string',
         'last_name' => 'string',
         'email_address' => 'string',
-        'mobile_number' => 'sting',
+        'mobile_number' => 'string',
         'pin' => 'string'
     ];
 }
