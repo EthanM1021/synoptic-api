@@ -1,1 +1,1 @@
-# swynooptic-api
+# synoptic-api
