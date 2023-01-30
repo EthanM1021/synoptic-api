@@ -53,4 +53,31 @@ class EmployeeTest extends TestCase
                 ]
             ]);
     }
+
+    /**
+     * @test
+     * Returns an error when an invalid id is given as a url parameter
+     *
+     * @returns void
+     */
+    public function returnsAnErrorMessageWhenThereIsAnInvalidIdSupplied(): void
+    {
+        // Hits the get endpoint with an invalid id
+        $response = $this->getJson(
+            route('employee.show', 'invalidId')
+        );
+
+        // From the controller, there is two json fields, error and message.
+        $this->assertCount(2, $response->json());
+        $response
+            ->assertStatus(404)
+            ->assertJsonStructure([
+                'error',
+                'message'
+            ])
+            ->assertJson([
+                'error' => true,
+                'message' => 'No employees found with the id of invalidId'
+            ]);
+    }
 }
