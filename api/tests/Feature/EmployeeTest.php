@@ -4,11 +4,13 @@ namespace Tests\Feature;
 
 use App\Models\Employee;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class EmployeeTest extends TestCase
 {
     use RefreshDatabase;
+    use WithFaker;
 
     /**
      * @test
@@ -105,6 +107,53 @@ class EmployeeTest extends TestCase
             ->assertJson([
                 'error' => true,
                 'message' => 'No employees found with the id of 1029384756'
+            ]);
+    }
+
+    /**
+     * @test
+     * Can insert an employee into the database with all fields which are required
+     *
+     * @return void
+     */
+    public function canInsertAnEmployeeIntoTheDatabase(): void
+    {
+        $firstName = $this->faker->firstName;
+        $lastName = $this->faker->lastName;
+        $emailAddress = $this->faker->email;
+        $mobileNumber = $this->faker->phoneNumber;
+        $pin = hash('md5', $this->faker->numberBetween(1000, 9999));
+
+        // Employee to insert
+        $requestBody = [
+            'first_name' => $firstName,
+            'last_name' => $lastName,
+            'email_address' => $emailAddress,
+            'mobile_number' => $mobileNumber,
+            'pin' => $pin
+        ];
+
+        // Gets the endpoint with the id of the employee record above
+        $response = $this->postJson(
+            route('employee.insert'),
+            $requestBody
+        );
+
+        $response->assertStatus(201)
+            ->assertJsonStructure([
+                'id',
+                'first_name',
+                'last_name',
+                'email_address',
+                'mobile_number',
+                'pin'
+            ])
+            ->assertExactJson([
+                'first_name' => $firstName,
+                'last_name' => $lastName,
+                'email_address' => $emailAddress,
+                'mobile_number' => $mobileNumber,
+                'pin' => $pin
             ]);
     }
 }
