@@ -70,6 +70,33 @@ class EmployeeTest extends TestCase
         // From the controller, there is two json fields, error and message.
         $this->assertCount(2, $response->json());
         $response
+            ->assertStatus(400)
+            ->assertJsonStructure([
+                'error',
+                'message'
+            ])
+            ->assertJson([
+                'error' => true,
+                'message' => 'Invalid Id supplied'
+            ]);
+    }
+
+    /**
+     * @test
+     * Returns an error when an id is not found is given as a url parameter
+     *
+     * @returns void
+     */
+    public function returnsAnErrorMessageWhenThereAnIdCannotBeFound(): void
+    {
+        // Hits the get endpoint with an id that does not exist
+        $response = $this->getJson(
+            route('employee.show', '1029384756')
+        );
+
+        // From the controller, there is two json fields, error and message.
+        $this->assertCount(2, $response->json());
+        $response
             ->assertStatus(404)
             ->assertJsonStructure([
                 'error',
@@ -77,7 +104,7 @@ class EmployeeTest extends TestCase
             ])
             ->assertJson([
                 'error' => true,
-                'message' => 'No employees found with the id of invalidId'
+                'message' => 'No employees found with the id of 1029384756'
             ]);
     }
 }
