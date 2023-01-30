@@ -8,14 +8,26 @@ use Illuminate\Http\Response;
 
 class EmployeeController extends Controller
 {
-    public function show(): JsonResponse
+    public function show($id): JsonResponse
     {
-        // Returns a json object with the key of employees and sets the status code to 200
-        return new JsonResponse(
-            [
-                "employees" => Employee::all()
-            ],
-            Response::HTTP_OK
-        );
+        $employee = Employee::find($id);
+
+        if ($employee) {
+            // Returns a json object with the key of employees and sets the status code to 200
+            return new JsonResponse(
+                [
+                    "employee" => Employee::find($id)
+                ],
+                Response::HTTP_OK
+            );
+        } else {
+            return new JsonResponse(
+                [
+                    'error' => true,
+                    'message' => 'No employees found with the id of ' . $id
+                ],
+                Response::HTTP_NOT_FOUND
+            );
+        }
     }
 }

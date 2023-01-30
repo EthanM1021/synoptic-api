@@ -16,7 +16,7 @@ class EmployeeTest extends TestCase
      *
      * @return void
      */
-    public function getsEmployee(): void
+    public function getsEmployeeWhenTheirIsOneEmployeeInTheTable(): void
     {
         // Creates an employee record from the EmployeeFactory with the faker library
         $factory = Employee::factory()->create();
@@ -28,7 +28,19 @@ class EmployeeTest extends TestCase
             route('employee.show', $factoryArray["id"])
         );
 
-        // Asserts the amount of employees returned is 1
+        // Asserts the amount of employees returned is 1 which it always will be when using the factory method above
         $this->assertCount(1, $response->json());
+        $response
+            ->assertStatus(200)
+            ->assertJsonStructure([
+                "employee" => [
+                    "id",
+                    "first_name",
+                    "last_name",
+                    "email_address",
+                    "mobile_number",
+                    "pin"
+                ]
+            ]);
     }
 }
