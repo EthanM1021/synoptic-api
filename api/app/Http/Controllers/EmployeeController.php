@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Employee;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class EmployeeController extends Controller
@@ -41,5 +42,33 @@ class EmployeeController extends Controller
                 Response::HTTP_BAD_REQUEST
             );
         }
+    }
+
+    public function insert(Request $request): JsonResponse
+    {
+        $validation = 'required|string';
+        $hashPin = hash('md5', $request->input('pin'));
+
+        // Validate fields
+        $validatedFields = $request->validate([
+            'first_name' => $validation,
+            'last_name' => $validation,
+            'email_address' => $validation,
+            'mobile_number' => $validation,
+            'pin' => $validation
+        ]);
+
+        Employee::create([
+            'first_name' => $validatedFields['first_name'],
+            'last_name' => $validatedFields['last_name'],
+            'email_address' => $validatedFields['email_address'],
+            'mobile_number' => $validatedFields['mobile_number'],
+            'pin' => $hashPin,
+        ]);
+
+        return new JsonResponse(
+            $validatedFields,
+            Response::HTTP_CREATED
+        );
     }
 }

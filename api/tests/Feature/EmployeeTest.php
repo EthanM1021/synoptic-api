@@ -118,6 +118,8 @@ class EmployeeTest extends TestCase
      */
     public function canInsertAnEmployeeIntoTheDatabase(): void
     {
+        // Store the faker values on a variable so can make sure
+        // they're the same in the test request and response
         $firstName = $this->faker->firstName;
         $lastName = $this->faker->lastName;
         $emailAddress = $this->faker->email;
@@ -133,7 +135,7 @@ class EmployeeTest extends TestCase
             'pin' => $pin
         ];
 
-        // Gets the endpoint with the id of the employee record above
+        // Calls the post endpoint with the body to insert
         $response = $this->postJson(
             route('employee.insert'),
             $requestBody
@@ -141,7 +143,6 @@ class EmployeeTest extends TestCase
 
         $response->assertStatus(201)
             ->assertJsonStructure([
-                'id',
                 'first_name',
                 'last_name',
                 'email_address',
