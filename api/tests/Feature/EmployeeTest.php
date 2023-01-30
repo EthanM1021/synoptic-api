@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use App\Models\Employee;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class EmployeeTest extends TestCase
@@ -19,11 +18,17 @@ class EmployeeTest extends TestCase
      */
     public function getsEmployee(): void
     {
+        // Creates an employee record from the EmployeeFactory with the faker library
+        $factory = Employee::factory()->create();
+        // Casts the attributes json object to an array
+        $factoryArray = $factory->attributesToArray();
 
-        Employee::factory()->create();
+        // Gets the endpoint with the id of the employee record above
+        $response = $this->getJson(
+            route('employee.show', $factoryArray["id"])
+        );
 
-        $response = $this->getJson(route('employee.show'));
-
+        // Asserts the amount of employees returned is 1
         $this->assertCount(1, $response->json());
     }
 }
