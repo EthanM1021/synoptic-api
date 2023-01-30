@@ -9,6 +9,8 @@ class Employee extends Model
 {
     use HasFactory;
 
+    public $table = 'employees';
+
     // Fields which can be assigned by an incoming request
     protected $fillable = [
         'first_name',
