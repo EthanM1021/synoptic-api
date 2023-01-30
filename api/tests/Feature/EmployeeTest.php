@@ -16,7 +16,7 @@ class EmployeeTest extends TestCase
      *
      * @return void
      */
-    public function getsEmployeeWhenTheirIsOneEmployeeInTheTable(): void
+    public function getsEmployeeWhenThereIsOneEmployeeInTheTable(): void
     {
         // Creates an employee record from the EmployeeFactory with the faker library
         $factory = Employee::factory()->create();
@@ -40,6 +40,16 @@ class EmployeeTest extends TestCase
                     "email_address",
                     "mobile_number",
                     "pin"
+                ]
+            ])
+            ->assertJson([
+                "employee" => [
+                    "id" => $factoryArray["id"],
+                    "first_name" => $factoryArray["first_name"],
+                    "last_name" => $factoryArray["last_name"],
+                    "email_address" => $factoryArray["email_address"],
+                    "mobile_number" => $factoryArray["mobile_number"],
+                    "pin" => $factoryArray["pin"]
                 ]
             ]);
     }
