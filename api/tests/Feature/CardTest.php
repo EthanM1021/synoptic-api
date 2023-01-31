@@ -45,4 +45,23 @@ class CardTest extends TestCase
                 'message'
             ]);
     }
+
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function passingAnInvalidIdWhenGettingThePin(): void
+    {
+        Employee::factory()->count(4)->create();
+        Card::factory()->count(1)->create();
+
+        $response = $this->getJson(route('pin.show', 'invalidId'));
+
+        $response->assertStatus(404)
+            ->assertJsonStructure([
+                'error',
+                'message'
+            ]);
+    }
 }
