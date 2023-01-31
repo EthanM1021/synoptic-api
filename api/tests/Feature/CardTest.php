@@ -25,8 +25,24 @@ class CardTest extends TestCase
         $response = $this->getJson(route('pin.show', range('1', '5')));
 
         $response->assertStatus(200)
-            ->assertJson([
+            ->assertJsonStructure([
                 'pin'
+            ]);
+    }
+
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function employeeDoesNotExistWhenGettingPin(): void
+    {
+        $response = $this->getJson(route('pin.show', 1));
+
+        $response->assertStatus(404)
+            ->assertJsonStructure([
+                'error',
+                'message'
             ]);
     }
 }
