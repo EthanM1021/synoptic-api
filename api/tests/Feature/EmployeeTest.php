@@ -156,5 +156,13 @@ class EmployeeTest extends TestCase
                 'mobile_number' => $mobileNumber,
                 'pin' => $pin
             ]);
+
+            $this->assertDatabaseCount('employees', 1);
+            $this->assertDatabaseHas('employees', [
+                'first_name' => $firstName,
+                'last_name' => $lastName,
+                'email_address' => $emailAddress,
+                'mobile_number' => $mobileNumber
+            ]);
     }
 }
