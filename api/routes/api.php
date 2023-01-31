@@ -20,5 +20,3 @@ Route::get('/employees/{id}', [EmployeeController::class, 'show'])->name('employ
 
 Route::post('/employees', [EmployeeController::class, 'insert'])->name('employee.insert');
 
-
-Route::get('/employee/pin/{id}', [CardController::class, 'show'])->name('pin.show');

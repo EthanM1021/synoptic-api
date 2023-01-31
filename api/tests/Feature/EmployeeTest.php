@@ -252,4 +252,19 @@ class EmployeeTest extends TestCase
             ],
         ];
     }
+
+    /**
+     * @test
+     * Delete the employee if their id exists
+     *
+     * @return void
+     */
+    public function deletesExistingEmployeeFromDatabase(): void
+    {
+        Employee::factory()->count(5)->create();
+
+        $response = $this->deleteJson(route('employee.destroy'))->assertNoContent();
+
+        $this->assertDatabaseCount('employees', 4);
+    }
 }
