@@ -16,9 +16,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/employees/{id}', [EmployeeController::class, 'show'])->name('employee.show');
+Route::get('/employee/{id}', [EmployeeController::class, 'show'])->name('employee.show');
 
-Route::post('/employees', [EmployeeController::class, 'insert'])->name('employee.insert');
+Route::post('/employee', [EmployeeController::class, 'insert'])->name('employee.insert');
 
 Route::delete('/employee/{id}', [EmployeeController::class, 'destroy'])->name('employee.destroy');
 
