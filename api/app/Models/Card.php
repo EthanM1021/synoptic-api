@@ -14,6 +14,7 @@ class Card extends Model
     protected $primaryKey = 'id';
 
     protected $fillable = [
+        'id',
         'credit'
     ];
 

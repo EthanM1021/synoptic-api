@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Employee;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,9 @@ class CardFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'id' => $this->faker->bothify('#?#?????####??##'),
+            '_fk_employee_id' => $this->faker->numberBetween(1, Employee::count()),
+            'credit' => $this->faker->randomFloat('2', 0, 100)
         ];
     }
 }
