@@ -263,8 +263,32 @@ class EmployeeTest extends TestCase
     {
         Employee::factory()->count(5)->create();
 
-        $response = $this->deleteJson(route('employee.destroy'))->assertNoContent();
+        $response = $this->deleteJson(route('employee.destroy', range(1, 5)));
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'error' => false,
+                'message' => 'Employee successfully deleted.'
+            ]);
 
         $this->assertDatabaseCount('employees', 4);
+    }
+
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function giveErrorIfEmployeeIdDoesNotExist(): void
+    {
+        $response = $this->deleteJson(route('employee.destroy', 1));
+
+        $response->assertStatus(404)
+            ->assertJson([
+                'error' => true,
+                'message' => 'There is no employee with that id'
+            ]);
+
+        $this->assertDatabaseCount('employees', 0);
     }
 }

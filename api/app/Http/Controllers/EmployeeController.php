@@ -72,4 +72,29 @@ class EmployeeController extends Controller
             Response::HTTP_CREATED
         );
     }
+
+    public function destroy($id): JsonResponse
+    {
+        $employeeToDelete = Employee::find($id);
+
+        if ($employeeToDelete) {
+            $employeeToDelete->delete();
+
+            return new JsonResponse(
+                [
+                    'error' => false,
+                    'message' => 'Employee successfully deleted.'
+                ],
+                Response::HTTP_OK
+            );
+        } else {
+            return new JsonResponse(
+                [
+                    'error' => true,
+                    'message' => 'There is no employee with that id'
+                ],
+                Response::HTTP_NOT_FOUND
+            );
+        }
+    }
 }

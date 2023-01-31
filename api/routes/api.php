@@ -20,3 +20,4 @@ Route::get('/employees/{id}', [EmployeeController::class, 'show'])->name('employ
 
 Route::post('/employees', [EmployeeController::class, 'insert'])->name('employee.insert');
 
+Route::delete('/employee/{id}', [EmployeeController::class, 'destroy'])->name('employee.destroy');
