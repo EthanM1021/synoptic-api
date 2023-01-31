@@ -176,13 +176,12 @@ class EmployeeTest extends TestCase
      */
     public function returnsAnErrorIfOneOrMoreOfTheFieldsAreInvalid($employee): void
     {
-        var_dump($employee);
-        $response = $this->postJson('employee.insert', $employee);
+        $response = $this->postJson(route('employee.insert'), $employee);
 
         $response->assertStatus(422)
             ->assertJsonStructure([
-                'error',
-                'message'
+                'message',
+                'errors'
             ]);
 
         $this->assertDatabaseCount('employees', 0);
@@ -205,7 +204,52 @@ class EmployeeTest extends TestCase
                     'mobile_number' => '01928 475192',
                     'pin' => 'h28fbcbcn284cu',
                 ]
-            ]
+            ],
+            'last name is invalid' => [
+                'employee' => [
+                    'first_name' => 'test',
+                    'last_name' => 1010,
+                    'email_address' => 'test@test.com',
+                    'mobile_number' => '01928 475192',
+                    'pin' => 'h28fbcbcn284cu',
+                ]
+            ],
+            'email address is invalid' => [
+                'employee' => [
+                    'first_name' => 'test',
+                    'last_name' => 1010,
+                    'email_address' => 'not an email address',
+                    'mobile_number' => '01928 475192',
+                    'pin' => 'h28fbcbcn284cu',
+                ]
+            ],
+            'mobile number is invalid' => [
+                'employee' => [
+                    'first_name' => 'test',
+                    'last_name' => 1010,
+                    'email_address' => 'not an email address',
+                    'mobile_number' => true,
+                    'pin' => 'h28fbcbcn284cu',
+                ]
+            ],
+            'pin is invalid' => [
+                'employee' => [
+                    'first_name' => 'test',
+                    'last_name' => 1010,
+                    'email_address' => 'not an email address',
+                    'mobile_number' => true,
+                    'pin' => 1029,
+                ]
+            ],
+            'all fields invalid' => [
+                'employee' => [
+                    'first_name' => '',
+                    'last_name' => '',
+                    'email_address' => '',
+                    'mobile_number' => '',
+                    'pin' => 0,
+                ]
+            ],
         ];
     }
 }
