@@ -31,4 +31,6 @@ class CardController extends Controller
             );
         }
     }
+
+
 }

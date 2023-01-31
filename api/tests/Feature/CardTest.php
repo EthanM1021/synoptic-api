@@ -64,4 +64,31 @@ class CardTest extends TestCase
                 'message'
             ]);
     }
+
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function employeeCanPayAndTheTotalWillBeDeductedFromTheirCredit(): void
+    {
+        Employee::factory()->count(10)->create();
+        Card::factory()->count(5)->create();
+
+        $requestBody = [
+            'total' => floatval(rand(1, 100))
+        ];
+
+        $response = $this->putJson(
+            route('card.pay', Card::find(rand(1, 5))),
+            $requestBody
+        );
+
+        $response->assertStatus(200)
+            ->assertJsonStructure([
+                "card_id",
+                "employee_id",
+                "total"
+            ]);
+    }
 }
