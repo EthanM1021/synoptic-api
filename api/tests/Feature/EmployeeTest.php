@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Employee;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use PHPUnit\Framework\DataProviderTestSuite;
 use Tests\TestCase;
 
 class EmployeeTest extends TestCase
@@ -164,5 +165,47 @@ class EmployeeTest extends TestCase
                 'email_address' => $emailAddress,
                 'mobile_number' => $mobileNumber
             ]);
+    }
+
+    /**
+     * @test
+     * @dataProvider invalidDataPassedToPostRequest
+     * If any fields are invalid for some reason, give a message as to why
+     *
+     * @return void
+     */
+    public function returnsAnErrorIfOneOrMoreOfTheFieldsAreInvalid($employee): void
+    {
+        var_dump($employee);
+        $response = $this->postJson('employee.insert', $employee);
+
+        $response->assertStatus(422)
+            ->assertJsonStructure([
+                'error',
+                'message'
+            ]);
+
+        $this->assertDatabaseCount('employees', 0);
+    }
+
+    /**
+     * @dataProvider
+     *
+     * data provider is a way to reduce code duplication
+     * in this scenario all these conditions should fail
+     */
+    private function invalidDataPassedToPostRequest(): array
+    {
+        return [
+            'first name is invalid' => [
+                'employee' => [
+                    'first_name' => 1010,
+                    'last_name' => 'test',
+                    'email_address' => 'test@test.com',
+                    'mobile_number' => '01928 475192',
+                    'pin' => 'h28fbcbcn284cu',
+                ]
+            ]
+        ];
     }
 }
