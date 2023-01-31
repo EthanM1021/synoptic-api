@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CardController;
 use App\Http\Controllers\EmployeeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -20,4 +21,4 @@ Route::get('/employees/{id}', [EmployeeController::class, 'show'])->name('employ
 Route::post('/employees', [EmployeeController::class, 'insert'])->name('employee.insert');
 
 
-Route::get('/employee/pin/{id}', [EmployeeController::class, 'show'])->name('pin.show');
+Route::get('/employee/pin/{id}', [CardController::class, 'show'])->name('pin.show');
