@@ -18,3 +18,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/employees/{id}', [EmployeeController::class, 'show'])->name('employee.show');
 
 Route::post('/employees', [EmployeeController::class, 'insert'])->name('employee.insert');
+
+
+Route::get('/employee/pin/{id}', [EmployeeController::class, 'show'])->name('pin.show');
