@@ -215,4 +215,36 @@ class CardTest extends TestCase
                 "message" => 'Card not found with this id'
             ]);
     }
+
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function cannotTopupIfRequestBodyIsEmpty(): void
+    {
+        Employee::factory()->count(1)->create();
+        Card::factory()->count(1)->create([
+            "credit" => '15.00',
+        ]);
+
+        $requestBody = [
+            'amount' => ''
+        ];
+
+        $response = $this->patchJson(
+            route('card.topup', 1),
+            $requestBody
+        );
+
+        $response->assertStatus(400)
+            ->assertJsonStructure([
+                "error",
+                "message"
+            ])
+            ->assertJson([
+                "error" => true,
+                "message" => 'No amount to add to employee card'
+            ]);
+    }
 }
