@@ -81,7 +81,16 @@ class CardController extends Controller
                 ],
                 Response::HTTP_NOT_FOUND
             );
+        } elseif (empty($amountToTopup) || $amountToTopup < 0.01) {
+            return new JsonResponse(
+                [
+                    "error" => true,
+                    "message" => "No amount to add to employee card"
+                ],
+                Response::HTTP_BAD_REQUEST
+            );
         } else {
+
             $card->credit = $card->credit += $amountToTopup;
             $card->save();
 
