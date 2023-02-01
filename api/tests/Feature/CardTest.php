@@ -351,7 +351,7 @@ class CardTest extends TestCase
         );
 
         $requestBody = [
-            'last_timestamp' => '2025-02-01 15:26'
+            'last_timestamp' => '2030-02-01 15:26'
         ];
 
         $response = $this->patchJson(route('timestamp.update', '123ABC456DEF789G'), $requestBody);

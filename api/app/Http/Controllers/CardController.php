@@ -127,7 +127,15 @@ class CardController extends Controller
                 ],
                 Response::HTTP_BAD_REQUEST
             );
-        } else {
+        } elseif (strtotime($timestamp) > time()) {
+            return new JsonResponse(
+                [
+                    'error' => true,
+                    'message' => 'Timestamp cannot be in the future'
+                ],
+                Response::HTTP_BAD_REQUEST
+            );
+        } {
             $cardToUpdate->last_scanned = $timestamp;
             $cardToUpdate->save();
 
