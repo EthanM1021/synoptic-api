@@ -224,9 +224,7 @@ class CardTest extends TestCase
     public function cannotTopupIfRequestBodyIsEmpty(): void
     {
         Employee::factory()->count(1)->create();
-        Card::factory()->count(1)->create([
-            "credit" => '15.00',
-        ]);
+        Card::factory()->count(1)->create();
 
         $requestBody = [
             'amount' => ''
