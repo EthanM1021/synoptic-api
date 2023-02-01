@@ -80,7 +80,7 @@ class CardTest extends TestCase
         ];
 
         $response = $this->putJson(
-            route('card.pay', rand(1, 1)),
+            route('card.pay', 1),
             $requestBody
         );
 
@@ -89,6 +89,61 @@ class CardTest extends TestCase
                 "card_id",
                 "employee_id",
                 "credit"
+            ]);
+    }
+
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function employeeCannotPayIfThereIsAnInsufficientAmountOnTheirRecord(): void
+    {
+        Employee::factory()->count(1)->create();
+        Card::factory()->count(1)->create();
+
+        $requestBody = [
+            'productTotal' => "2000.98"
+        ];
+
+        $response = $this->putJson(
+            route('card.pay', 1),
+            $requestBody
+        );
+
+        $response->assertStatus(400)
+            ->assertJsonStructure([
+                "error",
+                "message"
+            ])
+            ->assertJson([
+                "error" => true,
+                "message" => 'Employee does not have the funds for this purchase'
+            ]);
+    }
+
+    public function errorOccursWhenAnEmployeeIdIsNotFound(): void
+    {
+        Employee::factory()->count(1)->create();
+        Card::factory()->count(1)->create();
+
+        $requestBody = [
+            'productTotal' => "10.00"
+        ];
+
+        $response = $this->putJson(
+            route('card.pay', 10),
+            $requestBody
+        );
+
+        $response->assertStatus(404)
+            ->assertJsonStructure([
+                "error",
+                "message"
+            ])
+            ->assertJson([
+                "error" => true,
+                "message" => 'Employee does not exist in our records'
             ]);
     }
 }

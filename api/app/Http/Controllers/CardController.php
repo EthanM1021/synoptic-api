@@ -40,7 +40,15 @@ class CardController extends Controller
 
         $card = Card::where('_fk_employee_id', '=', strval($employeeId))->firstOrFail();
 
-        if ($amountToDeduct < $card->credit) {
+        if (!$card) {
+            return new JsonResponse(
+                [
+                    "error" => true,
+                    "message" => 'Employee does not exist in our records'
+                ],
+                Response::HTTP_NOT_FOUND
+            );
+        } elseif ($amountToDeduct < $card->credit) {
             $card->credit = $card->credit - $amountToDeduct;
             $card->save();
 
