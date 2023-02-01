@@ -147,4 +147,27 @@ class CardController extends Controller
             );
         }
     }
+
+    public function showTimestamp($cardId): JsonResponse
+    {
+        $card = Card::find($cardId);
+
+        if ($card === null) {
+            return new JsonResponse(
+                [
+                    "error" => true,
+                    "message" => "This card id does not exist"
+                ],
+                Response::HTTP_NOT_FOUND
+            );
+        } else {
+            return new JsonResponse(
+                [
+                    "last_scanned" => $card->last_scanned,
+                    "last_60_mins" => $card->is_logged_in
+                ],
+                Response::HTTP_OK
+            );
+        }
+    }
 }

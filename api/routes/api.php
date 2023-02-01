@@ -28,4 +28,8 @@ Route::patch('/employee/pay/{employee_id}', [CardController::class, 'pay'])->nam
 
 Route::patch('/employee/topup/{employee_id}', [CardController::class, 'topup'])->name('card.topup');
 
-Route::patch('/employee/update_timestamp/{card_id}', [CardController::class, 'updateTimestamp'])->name('timestamp.update');
+Route::patch('/employee/update_timestamp/{card_id}', [CardController::class, 'updateTimestamp'])
+    ->name('timestamp.update');
+
+Route::get('/employee/last_timestamp/{card_id}', [CardController::class, 'showTimestamp'])
+    ->name('timestamp.show');

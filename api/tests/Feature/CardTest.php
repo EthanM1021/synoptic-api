@@ -7,6 +7,7 @@ use App\Models\Employee;
 use Carbon\Traits\Date;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\JsonResponse;
 use Tests\TestCase;
 
 class CardTest extends TestCase
@@ -364,6 +365,49 @@ class CardTest extends TestCase
             ->assertJson([
                 'error' => true,
                 'message' => 'Timestamp cannot be in the future'
+            ]);
+    }
+
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function canGetEmployeeTimestampFromRecord(): void
+    {
+        Employee::factory()->count(5)->create();
+        Card::factory()->count(1)->create(
+            [
+                "id" => '123ABC456DEF789G'
+            ]
+        );
+
+        $response = $this->getJson(route('timestamp.show', '123ABC456DEF789G'));
+
+        $response->assertStatus(200)
+            ->assertJsonStructure([
+                "last_scanned",
+                "last_60_mins"
+            ]);
+    }
+
+    /**
+     * @test
+     *
+     * @return JsonResponse
+     */
+    public function cannotGetCardIfDoesNotExist(): void
+    {
+        $response = $this->getJson(route('timestamp.show', 'viv766yyx614al454'));
+
+        $response->assertStatus(404)
+            ->assertJsonStructure([
+                "error",
+                "message"
+            ])
+            ->assertJson([
+                "error" => true,
+                "message" => "This card id does not exist"
             ]);
     }
 }
