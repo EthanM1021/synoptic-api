@@ -41,8 +41,7 @@ class EmployeeTest extends TestCase
                     "first_name",
                     "last_name",
                     "email_address",
-                    "mobile_number",
-                    "pin"
+                    "mobile_number"
                 ]
             ])
             ->assertJson([
@@ -51,8 +50,7 @@ class EmployeeTest extends TestCase
                     "first_name" => $factoryArray["first_name"],
                     "last_name" => $factoryArray["last_name"],
                     "email_address" => $factoryArray["email_address"],
-                    "mobile_number" => $factoryArray["mobile_number"],
-                    "pin" => $factoryArray["pin"]
+                    "mobile_number" => $factoryArray["mobile_number"]
                 ]
             ]);
     }
@@ -107,7 +105,7 @@ class EmployeeTest extends TestCase
             ])
             ->assertJson([
                 'error' => true,
-                'message' => 'No employees found with the id of 1029384756'
+                'message' => 'Employee not found with this id'
             ]);
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\EmployeeResource;
 use App\Models\Employee;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -18,7 +19,7 @@ class EmployeeController extends Controller
             // Returns a json object with the key of employees and sets the status code to 200
             return new JsonResponse(
                 [
-                    "employee" => Employee::find($integerId)
+                    "employee" => new EmployeeResource($employee)
                 ],
                 Response::HTTP_OK
             );
@@ -28,7 +29,7 @@ class EmployeeController extends Controller
             return new JsonResponse(
                 [
                     'error' => true,
-                    'message' => 'No employees found with the id of ' . $integerId
+                    'message' => 'Employee not found with this id'
                 ],
                 Response::HTTP_NOT_FOUND
             );
