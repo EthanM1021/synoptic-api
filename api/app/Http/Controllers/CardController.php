@@ -66,4 +66,24 @@ class CardController extends Controller
             );
         }
     }
+
+    public function topup(Request $request, $employeeId): JsonResponse
+    {
+        $amountToTopup = $request->input('amount');
+
+        $card = Card::where('_fk_employee_id', '=', strval($employeeId))->firstOrFail();
+
+        $card->credit = $card->credit += $amountToTopup;
+        $card->save();
+
+        return new JsonResponse(
+            [
+                "card_id" => $card->id,
+                "employee_id" => $card->_fk_employee_id,
+                "credit" => $card->credit,
+                "message" => "Credit updated successfully"
+            ],
+            Response::HTTP_OK
+        );
+    }
 }

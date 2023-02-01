@@ -178,6 +178,7 @@ class CardTest extends TestCase
             ])
             ->assertJson([
                 "card_id" => 'abcd1928fghi1847',
+                "employee_id" => "1",
                 "credit" => "45.00",
                 "message" => "Credit updated successfully"
             ]);
