@@ -115,16 +115,28 @@ class CardController extends Controller
 
     public function updateTimestamp($cardId, Request $request): JsonResponse
     {
+        $timestamp = $request->input('last_timestamp');
+
         $cardToUpdate = Card::where('id', '=', strval($cardId))->first();
 
-        $cardToUpdate->last_scanned = $request->input('last_timestamp');
-        $cardToUpdate->save();
+        if (empty($timestamp)) {
+            return new JsonResponse(
+                [
+                    'error' => true,
+                    'message' => 'No timestamp provided'
+                ],
+                Response::HTTP_BAD_REQUEST
+            );
+        } else {
+            $cardToUpdate->last_scanned = $timestamp;
+            $cardToUpdate->save();
 
-        return new JsonResponse([
-            [
-                "last_timestamp" => $cardToUpdate->last_scanned
-            ],
-            Response::HTTP_OK
-        ]);
+            return new JsonResponse(
+                [
+                    "last_timestamp" => $cardToUpdate->last_scanned
+                ],
+                Response::HTTP_OK
+            );
+        }
     }
 }
