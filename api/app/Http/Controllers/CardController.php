@@ -38,7 +38,7 @@ class CardController extends Controller
     {
         $amountToDeduct = $request->input('productTotal');
 
-        $card = Card::where('_fk_employee_id', '=', strval($employeeId))->firstOrFail();
+        $card = Card::where('_fk_employee_id', '=', strval($employeeId))->first();
 
         if (!$card) {
             return new JsonResponse(
@@ -67,23 +67,33 @@ class CardController extends Controller
         }
     }
 
-    public function topup(Request $request, $employeeId): JsonResponse
+    public function topup($employeeId, Request $request): JsonResponse
     {
         $amountToTopup = $request->input('amount');
 
-        $card = Card::where('_fk_employee_id', '=', strval($employeeId))->firstOrFail();
+        $card = Card::where('_fk_employee_id', '=', strval($employeeId))->first();
 
-        $card->credit = $card->credit += $amountToTopup;
-        $card->save();
+        if (!$card) {
+            return new JsonResponse(
+                [
+                    "error" => true,
+                    "message" => "Card not found with this id"
+                ],
+                Response::HTTP_NOT_FOUND
+            );
+        } else {
+            $card->credit = $card->credit += $amountToTopup;
+            $card->save();
 
-        return new JsonResponse(
-            [
-                "card_id" => $card->id,
-                "employee_id" => $card->_fk_employee_id,
-                "credit" => $card->credit,
-                "message" => "Credit updated successfully"
-            ],
-            Response::HTTP_OK
-        );
+            return new JsonResponse(
+                [
+                    "card_id" => $card->id,
+                    "employee_id" => $card->_fk_employee_id,
+                    "credit" => $card->credit,
+                    "message" => "Credit updated successfully"
+                ],
+                Response::HTTP_OK
+            );
+        }
     }
 }

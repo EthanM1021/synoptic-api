@@ -79,7 +79,7 @@ class CardTest extends TestCase
             'total' => floatval(rand(1, 100))
         ];
 
-        $response = $this->putJson(
+        $response = $this->patchJson(
             route('card.pay', 1),
             $requestBody
         );
@@ -106,7 +106,7 @@ class CardTest extends TestCase
             'productTotal' => "2000.98"
         ];
 
-        $response = $this->putJson(
+        $response = $this->patchJson(
             route('card.pay', 1),
             $requestBody
         );
@@ -131,7 +131,7 @@ class CardTest extends TestCase
             'productTotal' => "10.00"
         ];
 
-        $response = $this->putJson(
+        $response = $this->patchJson(
             route('card.pay', 10),
             $requestBody
         );
@@ -161,11 +161,11 @@ class CardTest extends TestCase
         ]);
 
         $requestBody = [
-            'id' => 'abcd1928fghi1847',
-            'amount' => "30.00"
+            'card_id' => 'abcd1928fghi1847',
+            'amount' => '30.00'
         ];
 
-        $response = $this->putJson(
+        $response = $this->patchJson(
             route('card.topup', 1),
             $requestBody
         );
@@ -189,17 +189,18 @@ class CardTest extends TestCase
      *
      * @return void
      */
-    public function employeeCannotTopupIfIdIsInvalid(): void
+    public function employeeCannotTopUpTheirCreditOnTheirCard(): void
     {
         Employee::factory()->count(1)->create();
-        Card::factory()->count(1)->create();
+        Card::factory()->count(1)->create([
+            "credit" => '15.00',
+        ]);
 
         $requestBody = [
-            'id' => 'abcd1928fghi1847',
-            'amount' => "30.00"
+            'amount' => '30.00'
         ];
 
-        $response = $this->putJson(
+        $response = $this->patchJson(
             route('card.topup', 100),
             $requestBody
         );
@@ -211,7 +212,7 @@ class CardTest extends TestCase
             ])
             ->assertJson([
                 "error" => true,
-                "message" => "Card not found with this id"
+                "message" => 'Card not found with this id'
             ]);
     }
 }

@@ -24,6 +24,6 @@ Route::delete('/employee/{id}', [EmployeeController::class, 'destroy'])->name('e
 
 Route::get('/employee/pin/{id}', [CardController::class, 'show'])->name('pin.show');
 
-Route::put('/employee/pay/{employee_id}', [CardController::class, 'pay'])->name('card.pay');
+Route::patch('/employee/pay/{employee_id}', [CardController::class, 'pay'])->name('card.pay');
 
-Route::put('/employee/topup/{employee_id}', [CardController::class, 'topup'])->name('card.topup');
+Route::patch('/employee/topup/{employee_id}', [CardController::class, 'topup'])->name('card.topup');
