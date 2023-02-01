@@ -27,7 +27,7 @@ class CardController extends Controller
             return new JsonResponse(
                 [
                     'error' => true,
-                    'message' => 'No employee found with this is'
+                    'message' => 'No employee found with this id'
                 ],
                 Response::HTTP_NOT_FOUND
             );
