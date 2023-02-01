@@ -183,4 +183,35 @@ class CardTest extends TestCase
                 "message" => "Credit updated successfully"
             ]);
     }
+
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function employeeCannotTopupIfIdIsInvalid(): void
+    {
+        Employee::factory()->count(1)->create();
+        Card::factory()->count(1)->create();
+
+        $requestBody = [
+            'id' => 'abcd1928fghi1847',
+            'amount' => "30.00"
+        ];
+
+        $response = $this->putJson(
+            route('card.topup', 100),
+            $requestBody
+        );
+
+        $response->assertStatus(404)
+            ->assertJsonStructure([
+                "error",
+                "message"
+            ])
+            ->assertJson([
+                "error" => true,
+                "message" => "Card not found with this id"
+            ]);
+    }
 }
