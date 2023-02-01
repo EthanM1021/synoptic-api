@@ -15,7 +15,9 @@ class Card extends Model
 
     protected $fillable = [
         'id',
-        'credit'
+        'credit',
+        'last_scanned',
+        'is_logged_in'
     ];
 
     protected $guarded = [
@@ -26,6 +28,8 @@ class Card extends Model
 
     protected $casts = [
         'id' => 'string',
-        'credit' => 'float'
+        'credit' => 'float',
+        'last_scanned' => 'datetime',
+        'is_logged_in' => 'boolean'
     ];
 }

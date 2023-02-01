@@ -21,7 +21,9 @@ class CardFactory extends Factory
         return [
             'id' => $this->faker->bothify('???###???###???#'),
             '_fk_employee_id' => $this->faker->numberBetween(1, Employee::count()),
-            'credit' => $this->faker->randomFloat('2', 0, 100)
+            'credit' => $this->faker->randomFloat('2', 0, 100),
+            'last_scanned' => $this->faker->dateTimeBetween('-3 hours'),
+            'is_logged_in' => $this->faker->boolean
         ];
     }
 }
