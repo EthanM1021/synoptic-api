@@ -137,6 +137,7 @@ class CardController extends Controller
             );
         } {
             $cardToUpdate->last_scanned = $timestamp;
+            $cardToUpdate->is_logged_in = !$cardToUpdate->is_logged_in;
             $cardToUpdate->save();
 
             return new JsonResponse(
