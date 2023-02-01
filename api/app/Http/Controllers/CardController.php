@@ -8,7 +8,6 @@ use App\Models\Employee;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Psy\Util\Json;
 
 class CardController extends Controller
 {
@@ -112,5 +111,20 @@ class CardController extends Controller
                 Response::HTTP_OK
             );
         }
+    }
+
+    public function updateTimestamp($cardId, Request $request): JsonResponse
+    {
+        $cardToUpdate = Card::where('id', '=', strval($cardId))->first();
+
+        $cardToUpdate->last_scanned = $request->input('last_timestamp');
+        $cardToUpdate->save();
+
+        return new JsonResponse([
+            [
+                "last_timestamp" => $cardToUpdate->last_scanned
+            ],
+            Response::HTTP_OK
+        ]);
     }
 }

@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Card;
 use App\Models\Employee;
+use Carbon\Traits\Date;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -73,10 +74,12 @@ class CardTest extends TestCase
     public function employeeCanPayAndTheTotalWillBeDeductedFromTheirCredit(): void
     {
         Employee::factory()->count(1)->create();
-        Card::factory()->count(1)->create();
+        Card::factory()->count(1)->create([
+            "credit" => 1000
+        ]);
 
         $requestBody = [
-            'productTotal' => floatval(rand(1, 100))
+            'productTotal' => 12.34
         ];
 
         $response = $this->patchJson(
@@ -273,6 +276,32 @@ class CardTest extends TestCase
             ->assertJson([
                 "error" => true,
                 "message" => 'No amount to add to employee card'
+            ]);
+    }
+
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function canUpdateLastScannedWithTimestamp(): void
+    {
+        Employee::factory()->count(10)->create();
+        Card::factory()->count(1)->create(
+            [
+                "id" => '123ABC456DEF789G'
+            ]
+        );
+
+        $requestBody = [
+            'last_timestamp' => date("Y-m-d H:i:s")
+        ];
+
+        $response = $this->patchJson(route('timestamp.update', '123ABC456DEF789G'), $requestBody);
+
+        $response->assertStatus(200)
+            ->assertJsonStructure([
+                'last_timestamp'
             ]);
     }
 }

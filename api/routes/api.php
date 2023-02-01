@@ -27,3 +27,5 @@ Route::get('/employee/pin/{id}', [CardController::class, 'show'])->name('pin.sho
 Route::patch('/employee/pay/{employee_id}', [CardController::class, 'pay'])->name('card.pay');
 
 Route::patch('/employee/topup/{employee_id}', [CardController::class, 'topup'])->name('card.topup');
+
+Route::patch('/employee/update_timestamp/{card_id}', [CardController::class, 'updateTimestamp'])->name('timestamp.update');

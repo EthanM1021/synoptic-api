@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('id', 16)->primary();
             $table->foreignId('_fk_employee_id')->constrained('employees');
             $table->float('credit');
-            $table->dateTime('last_scanned');
+            $table->dateTime('last_scanned')->default(null);
             $table->boolean('is_logged_in');
             $table->timestamps();
         });
