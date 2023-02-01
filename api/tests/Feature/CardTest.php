@@ -76,7 +76,7 @@ class CardTest extends TestCase
         Card::factory()->count(1)->create();
 
         $requestBody = [
-            'total' => floatval(rand(1, 100))
+            'productTotal' => floatval(rand(1, 100))
         ];
 
         $response = $this->patchJson(
@@ -119,6 +119,36 @@ class CardTest extends TestCase
             ->assertJson([
                 "error" => true,
                 "message" => 'Employee does not have the funds for this purchase'
+            ]);
+    }
+
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function employeeCannotPayIfTheAmountIsEmpty(): void
+    {
+        Employee::factory()->count(1)->create();
+        Card::factory()->count(1)->create();
+
+        $requestBody = [
+            'productTotal' => ""
+        ];
+
+        $response = $this->patchJson(
+            route('card.pay', 1),
+            $requestBody
+        );
+
+        $response->assertStatus(400)
+            ->assertJsonStructure([
+                "error",
+                "message"
+            ])
+            ->assertJson([
+                "error" => true,
+                "message" => 'No amount to deduct to employee card'
             ]);
     }
 

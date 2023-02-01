@@ -48,6 +48,14 @@ class CardController extends Controller
                 ],
                 Response::HTTP_NOT_FOUND
             );
+        } elseif ($amountToDeduct < 0.01) {
+            return new JsonResponse(
+                [
+                    'error' => true,
+                    'message' => 'No amount to deduct to employee card'
+                ],
+                Response::HTTP_BAD_REQUEST
+            );
         } elseif ($amountToDeduct < $card->credit) {
             $card->credit = $card->credit - $amountToDeduct;
             $card->save();
