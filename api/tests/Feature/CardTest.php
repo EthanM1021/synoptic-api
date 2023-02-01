@@ -72,15 +72,15 @@ class CardTest extends TestCase
      */
     public function employeeCanPayAndTheTotalWillBeDeductedFromTheirCredit(): void
     {
-        Employee::factory()->count(10)->create();
-        Card::factory()->count(5)->create();
+        Employee::factory()->count(1)->create();
+        Card::factory()->count(1)->create();
 
         $requestBody = [
             'total' => floatval(rand(1, 100))
         ];
 
         $response = $this->putJson(
-            route('card.pay', Card::find(rand(1, 5))),
+            route('card.pay', rand(1, 1)),
             $requestBody
         );
 
@@ -88,7 +88,7 @@ class CardTest extends TestCase
             ->assertJsonStructure([
                 "card_id",
                 "employee_id",
-                "total"
+                "credit"
             ]);
     }
 }

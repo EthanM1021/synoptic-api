@@ -23,3 +23,5 @@ Route::post('/employee', [EmployeeController::class, 'insert'])->name('employee.
 Route::delete('/employee/{id}', [EmployeeController::class, 'destroy'])->name('employee.destroy');
 
 Route::get('/employee/pin/{id}', [CardController::class, 'show'])->name('pin.show');
+
+Route::put('/employee/card/{employee_id}', [CardController::class, 'pay'])->name('card.pay');
