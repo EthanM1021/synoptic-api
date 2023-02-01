@@ -304,4 +304,30 @@ class CardTest extends TestCase
                 'last_timestamp'
             ]);
     }
+
+    public function canNotUpdateTimestampIfNoTimestampIsOnBody(): void
+    {
+        Employee::factory()->count(10)->create();
+        Card::factory()->count(1)->create(
+            [
+                "id" => '123ABC456DEF789G'
+            ]
+        );
+
+        $requestBody = [
+            'last_timestamp' => ''
+        ];
+
+        $response = $this->patchJson(route('timestamp.update', '123ABC456DEF789G'), $requestBody);
+
+        $response->assertStatus(400)
+            ->assertJsonStructure([
+                'error',
+                'message'
+            ])
+            ->assertJson([
+                'error' => true,
+                'message' => 'No timestamp provided'
+            ]);
+    }
 }
