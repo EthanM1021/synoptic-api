@@ -146,4 +146,40 @@ class CardTest extends TestCase
                 "message" => 'Employee does not exist in our records'
             ]);
     }
+
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function employeeCanTopUpTheirCreditOnTheirCard(): void
+    {
+        Employee::factory()->count(1)->create();
+        Card::factory()->count(1)->create([
+            "id" => 'abcd1928fghi1847',
+            "credit" => '15.00',
+        ]);
+
+        $requestBody = [
+            'id' => 'abcd1928fghi1847',
+            'amount' => "30.00"
+        ];
+
+        $response = $this->putJson(
+            route('card.topup', 1),
+            $requestBody
+        );
+
+        $response->assertStatus(200)
+            ->assertJsonStructure([
+                "card_id",
+                "credit",
+                "message"
+            ])
+            ->assertJson([
+                "card_id" => 'abcd1928fghi1847',
+                "credit" => "45.00",
+                "message" => "Credit updated successfully"
+            ]);
+    }
 }
